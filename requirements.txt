@@ -1,0 +1,6 @@
+pandas>=2.0
+# Pin NumPy 1.x: NumPy 2.x often breaks conda/pip mixes (matplotlib, pyarrow, numexpr, etc.)
+# until all compiled deps are rebuilt. Use: pip install "numpy>=1.26,<2"
+numpy>=1.26,<2
+matplotlib>=3.7
+seaborn>=0.13
