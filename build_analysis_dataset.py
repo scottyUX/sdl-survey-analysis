@@ -19,8 +19,9 @@ import numpy as np
 import pandas as pd
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_INPUT = SCRIPT_DIR / "cleaned_survey.csv"
-DEFAULT_OUTPUT = SCRIPT_DIR / "analysis_dataset.csv"
+DATA_DIR = SCRIPT_DIR / "data"
+DEFAULT_INPUT = DATA_DIR / "cleaned_survey.csv"
+DEFAULT_OUTPUT = DATA_DIR / "analysis_dataset.csv"
 
 # SDLC stage keys (output suffixes) -> Qualtrics column prefixes in CSV
 STAGE_PREFIX: dict[str, str] = {
@@ -233,6 +234,7 @@ def main() -> int:
     analysis = build_analysis_frame(df_num)
     out_cols = [c for c in analysis.columns if c != "ResponseId"]
     print(f"Computed columns ({len(out_cols)}): {', '.join(out_cols)}")
+    out.parent.mkdir(parents=True, exist_ok=True)
     analysis.to_csv(out, index=False)
     print(f"Saved: {out}")
 

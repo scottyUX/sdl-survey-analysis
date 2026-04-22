@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Rebuild index.html from pipeline outputs (stage_level_summary.csv,
+Rebuild index.html from pipeline outputs under data/ (stage_level_summary.csv,
 correlation_matrix.csv, stage_au_aum_correlations.csv, descriptive_statistics.csv,
 analysis_dataset_enriched.csv).
 
@@ -17,14 +17,15 @@ import numpy as np
 import pandas as pd
 
 DIR = Path(__file__).resolve().parent
+DATA_DIR = DIR / "data"
 
 
 def load_bundle() -> dict:
-    stage = pd.read_csv(DIR / "stage_level_summary.csv")
-    corr = pd.read_csv(DIR / "correlation_matrix.csv", index_col=0)
-    stage_r = pd.read_csv(DIR / "stage_au_aum_correlations.csv")
-    desc = pd.read_csv(DIR / "descriptive_statistics.csv")
-    enriched = pd.read_csv(DIR / "analysis_dataset_enriched.csv")
+    stage = pd.read_csv(DATA_DIR / "stage_level_summary.csv")
+    corr = pd.read_csv(DATA_DIR / "correlation_matrix.csv", index_col=0)
+    stage_r = pd.read_csv(DATA_DIR / "stage_au_aum_correlations.csv")
+    desc = pd.read_csv(DATA_DIR / "descriptive_statistics.csv")
+    enriched = pd.read_csv(DATA_DIR / "analysis_dataset_enriched.csv")
 
     stages_key = stage["Stage"].tolist()
     au_m = [round(float(stage.loc[stage["Stage"] == s, "AU_mean"].iloc[0]), 3) for s in stages_key]
@@ -277,7 +278,7 @@ def main() -> int:
     <section class="hero">
       <span class="badge">Stage-Aware TAM + AUM Dashboard</span>
       <h1>Generative AI Usage in Software Engineering Education</h1>
-      <p>This dashboard summarizes results from the UCSC survey on generative AI usage across the software development lifecycle (SDLC). Values are synced from <code>analysis_dataset_enriched.csv</code>, Phase 3 CSVs in this folder, and static figures in <code>assets/</code>.</p>
+      <p>This dashboard summarizes results from the UCSC survey on generative AI usage across the software development lifecycle (SDLC). Values are synced from <code>data/analysis_dataset_enriched.csv</code>, other Phase 3 CSVs in <code>data/</code>, and static figures in <code>assets/</code>.</p>
       <div class="grid grid-3">
         <div class="card">
           <div class="metric">{b["n"]}</div>
@@ -314,7 +315,7 @@ def main() -> int:
 
     <section class="section card">
       <h2>Table 1. Stage-Level Summary</h2>
-      <p class="small">Source: <code>stage_level_summary.csv</code></p>
+      <p class="small">Source: <code>data/stage_level_summary.csv</code></p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -364,7 +365,7 @@ def main() -> int:
       <div class="card">
         <figure>
           <div class="chart-wrap"><canvas id="stageCorrChart"></canvas></div>
-          <figcaption><strong>Figure 5.</strong> Pearson correlation between AU and AUM within each stage. Source: <code>stage_au_aum_correlations.csv</code>.</figcaption>
+          <figcaption><strong>Figure 5.</strong> Pearson correlation between AU and AUM within each stage. Source: <code>data/stage_au_aum_correlations.csv</code>.</figcaption>
         </figure>
       </div>
     </section>
@@ -384,7 +385,7 @@ def main() -> int:
 
     <section class="section card">
       <h2>Table 2. Selected correlations</h2>
-      <p class="small">Source: <code>correlation_matrix.csv</code> (planning-stage TAM and globals).</p>
+      <p class="small">Source: <code>data/correlation_matrix.csv</code> (planning-stage TAM and globals).</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -409,7 +410,7 @@ def main() -> int:
 
     <section class="section card">
       <h2>Figure 6. Correlation matrix (interactive)</h2>
-      <p class="small">Same numeric values as <code>correlation_matrix.csv</code>.</p>
+      <p class="small">Same numeric values as <code>data/correlation_matrix.csv</code>.</p>
       <div id="corrMatrix" class="matrix"></div>
     </section>
 

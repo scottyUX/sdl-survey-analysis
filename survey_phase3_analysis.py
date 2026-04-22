@@ -3,7 +3,7 @@
 Phase 3: Descriptive statistics, stage-level AU/AUM summaries, figures,
 correlation matrix, and basic insights from analysis_dataset.csv.
 
-Outputs CSVs to the project root by default; PNG figures go under ``assets/`` (configurable).
+Outputs CSVs to ``data/`` by default; PNG figures go under ``assets/`` (configurable).
 
 Environment note: If you see AttributeError: _ARRAY_API not found or
 numpy.core.multiarray failed to import, you have NumPy 2.x with packages
@@ -25,8 +25,9 @@ import pandas as pd
 import seaborn as sns
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_INPUT = SCRIPT_DIR / "analysis_dataset.csv"
-DEFAULT_OUTPUT_DIR = SCRIPT_DIR
+DATA_DIR = SCRIPT_DIR / "data"
+DEFAULT_INPUT = DATA_DIR / "analysis_dataset.csv"
+DEFAULT_OUTPUT_DIR = DATA_DIR
 DEFAULT_ASSETS_DIR = SCRIPT_DIR / "assets"
 
 STAGES: list[str] = [

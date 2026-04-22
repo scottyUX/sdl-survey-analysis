@@ -6,18 +6,19 @@ Python pipeline and static dashboard for a Qualtrics survey on **generative AI u
 
 | Path | Purpose |
 |------|---------|
-| `clean_survey_phase1.py` | Phase 1: load export, filter valid responses, `cleaned_survey.csv` |
-| `build_analysis_dataset.py` | Phase 2: Likert → numeric, per-stage PEOU/PU/BI/AU, AUM, literacy → `analysis_dataset.csv` |
-| `survey_phase3_analysis.py` | Phase 3: descriptive tables, correlations, figures (PNG + CSV summaries) |
-| `generate_survey_dashboard.py` | Regenerate `index.html` from the CSV outputs |
+| `clean_survey_phase1.py` | Phase 1: load export, filter valid responses → `data/cleaned_survey.csv` |
+| `build_analysis_dataset.py` | Phase 2: Likert → numeric, constructs → `data/analysis_dataset.csv` |
+| `survey_phase3_analysis.py` | Phase 3: descriptive tables, correlations; CSVs → `data/`, figures → `assets/` |
+| `generate_survey_dashboard.py` | Regenerate `index.html` from `data/*.csv` |
 | `index.html` | Static dashboard (Chart.js + embedded stats; open with a local server) |
+| `data/` | Pipeline CSVs (cleaned, analysis, Phase 3 summaries; row-level files gitignored) |
 | `assets/` | Phase 3 figure PNGs (pipeline writes here by default) |
 | `plans/` | Design notes / Cursor plans for each phase |
 | `sigcse_paper/` | SIGCSE / Overleaf paper: `main.tex`, `refs.bib`, figure PDFs |
 
-**Aggregates** committed here (no respondent IDs): `descriptive_statistics.csv`, `stage_level_summary.csv`, `correlation_matrix.csv`, `stage_au_aum_correlations.csv`, and figure PNGs under `assets/`.
+**Aggregates** committed under `data/` (no respondent IDs): `descriptive_statistics.csv`, `stage_level_summary.csv`, `correlation_matrix.csv`, `stage_au_aum_correlations.csv`, plus figure PNGs under `assets/`.
 
-**Row-level CSVs** (`cleaned_survey.csv`, `analysis_dataset*.csv`) are **gitignored** by default so a public clone does not publish `ResponseId` or IP fields. Place your own Qualtrics export where the scripts expect it and rerun the pipeline locally.
+**Row-level CSVs** (`data/cleaned_survey.csv`, `data/analysis_dataset*.csv`) are **gitignored** by default so a public clone does not publish `ResponseId` or IP fields. Place your own Qualtrics export where the scripts expect it and rerun the pipeline locally.
 
 ## Quick start
 

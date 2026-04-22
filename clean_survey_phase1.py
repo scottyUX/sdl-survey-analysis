@@ -4,7 +4,7 @@ Phase 1: Qualtrics survey export — data cleaning and validation.
 
 Usage:
   python clean_survey_phase1.py
-  python clean_survey_phase1.py --input /path/to/survey_results.csv --output ./cleaned_survey.csv
+  python clean_survey_phase1.py --input /path/to/survey_results.csv --output ./data/cleaned_survey.csv
 
 Requires: pip install pandas
 """
@@ -146,7 +146,7 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=Path,
         default=None,
-        help="Output CSV path (default: cleaned_survey.csv next to this script)",
+        help="Output CSV path (default: data/cleaned_survey.csv next to this script)",
     )
     return p.parse_args()
 
@@ -154,7 +154,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     script_dir = Path(__file__).resolve().parent
-    out_path = args.output or (script_dir / "cleaned_survey.csv")
+    out_path = args.output or (script_dir / "data" / "cleaned_survey.csv")
     input_path = args.input.expanduser()
 
     if not input_path.is_file():
@@ -252,6 +252,7 @@ def main() -> int:
     overall_retained = (100.0 * final_n / n_initial) if n_initial else 0.0
     print(f"\nOverall: retained {final_n} of {n_initial} loaded rows ({overall_retained:.1f}%).")
 
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     df_clean.to_csv(out_path, index=False)
     print(f"\nSaved: {out_path}")
 

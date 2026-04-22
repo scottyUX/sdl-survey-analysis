@@ -156,7 +156,7 @@
     <section class="hero">
       <span class="badge">Stage-Aware TAM + AUM Dashboard</span>
       <h1>Generative AI Usage in Software Engineering Education</h1>
-      <p>This dashboard summarizes results from the UCSC survey on generative AI usage across the software development lifecycle (SDLC). Values are synced from <code>analysis_dataset_enriched.csv</code>, Phase 3 CSVs in this folder, and static figures in <code>assets/</code>.</p>
+      <p>This dashboard summarizes results from the UCSC survey on generative AI usage across the software development lifecycle (SDLC). Values are synced from <code>data/analysis_dataset_enriched.csv</code>, other Phase 3 CSVs in <code>data/</code>, and static figures in <code>assets/</code>.</p>
       <div class="grid grid-3">
         <div class="card">
           <div class="metric">96</div>
@@ -193,7 +193,7 @@
 
     <section class="section card">
       <h2>Table 1. Stage-Level Summary</h2>
-      <p class="small">Source: <code>stage_level_summary.csv</code></p>
+      <p class="small">Source: <code>data/stage_level_summary.csv</code></p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -249,7 +249,7 @@
       <div class="card">
         <figure>
           <div class="chart-wrap"><canvas id="stageCorrChart"></canvas></div>
-          <figcaption><strong>Figure 5.</strong> Pearson correlation between AU and AUM within each stage. Source: <code>stage_au_aum_correlations.csv</code>.</figcaption>
+          <figcaption><strong>Figure 5.</strong> Pearson correlation between AU and AUM within each stage. Source: <code>data/stage_au_aum_correlations.csv</code>.</figcaption>
         </figure>
       </div>
     </section>
@@ -269,7 +269,7 @@
 
     <section class="section card">
       <h2>Table 2. Selected correlations</h2>
-      <p class="small">Source: <code>correlation_matrix.csv</code> (planning-stage TAM and globals).</p>
+      <p class="small">Source: <code>data/correlation_matrix.csv</code> (planning-stage TAM and globals).</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -294,7 +294,7 @@
 
     <section class="section card">
       <h2>Figure 6. Correlation matrix (interactive)</h2>
-      <p class="small">Same numeric values as <code>correlation_matrix.csv</code>.</p>
+      <p class="small">Same numeric values as <code>data/correlation_matrix.csv</code>.</p>
       <div id="corrMatrix" class="matrix"></div>
     </section>
 

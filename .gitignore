@@ -13,9 +13,9 @@ venv/
 
 # Identifiable survey rows (ResponseId, IP, etc.) — keep local only
 # Remove these lines only if you accept publishing de-identified row-level exports.
-cleaned_survey.csv
-analysis_dataset.csv
-analysis_dataset_enriched.csv
+data/cleaned_survey.csv
+data/analysis_dataset.csv
+data/analysis_dataset_enriched.csv
 
 # Optional: ignore all raw pipeline CSVs (uncomment to track only code + figures)
-# *.csv
+# data/*.csv
