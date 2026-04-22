@@ -12,6 +12,7 @@ Python pipeline and static dashboard for a Qualtrics survey on **generative AI u
 | `generate_survey_dashboard.py` | Regenerate `index.html` from the CSV outputs |
 | `index.html` | Static dashboard (Chart.js + embedded stats; open with a local server) |
 | `plans/` | Design notes / Cursor plans for each phase |
+| `sigcse_paper_overleaf_3/` | SIGCSE / Overleaf paper: `main.tex`, `refs.bib`, figure PDFs |
 
 **Aggregates** committed here (no respondent IDs): `descriptive_statistics.csv`, `stage_level_summary.csv`, `correlation_matrix.csv`, `stage_au_aum_correlations.csv`, and figure PNGs.
 
