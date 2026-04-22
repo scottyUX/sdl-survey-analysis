@@ -3,7 +3,7 @@
 Phase 3: Descriptive statistics, stage-level AU/AUM summaries, figures,
 correlation matrix, and basic insights from analysis_dataset.csv.
 
-Outputs CSVs and PNGs to a configurable directory (default: same folder as this script).
+Outputs CSVs to the project root by default; PNG figures go under ``assets/`` (configurable).
 
 Environment note: If you see AttributeError: _ARRAY_API not found or
 numpy.core.multiarray failed to import, you have NumPy 2.x with packages
@@ -27,6 +27,7 @@ import seaborn as sns
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_INPUT = SCRIPT_DIR / "analysis_dataset.csv"
 DEFAULT_OUTPUT_DIR = SCRIPT_DIR
+DEFAULT_ASSETS_DIR = SCRIPT_DIR / "assets"
 
 STAGES: list[str] = [
     "plan",
@@ -52,7 +53,8 @@ def save_extended_figures(
     df: pd.DataFrame,
     stage_summary_df: pd.DataFrame,
     corr_matrix: pd.DataFrame,
-    out_dir: Path,
+    assets_dir: Path,
+    data_dir: Path,
 ) -> list[Path]:
     """
     Publication-style figures: AU vs AUM by stage, dual line plot, heatmap,
@@ -92,7 +94,7 @@ def save_extended_figures(
     ax.set_xlabel("AU")
     ax.set_ylabel("AUM")
     fig.tight_layout()
-    p = out_dir / "au_vs_aum_by_stage.png"
+    p = assets_dir / "au_vs_aum_by_stage.png"
     fig.savefig(p, dpi=300)
     plt.close(fig)
     saved.append(p)
@@ -117,7 +119,7 @@ def save_extended_figures(
     ax.legend()
     plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
     fig.tight_layout()
-    p = out_dir / "au_vs_aum_lines.png"
+    p = assets_dir / "au_vs_aum_lines.png"
     fig.savefig(p, dpi=300)
     plt.close(fig)
     saved.append(p)
@@ -137,7 +139,7 @@ def save_extended_figures(
     )
     ax.set_title("Correlation Matrix")
     fig.tight_layout()
-    p = out_dir / "correlation_heatmap.png"
+    p = assets_dir / "correlation_heatmap.png"
     fig.savefig(p, dpi=300)
     plt.close(fig)
     saved.append(p)
@@ -156,7 +158,7 @@ def save_extended_figures(
     ax.set_ylabel("AU")
     plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
     fig.tight_layout()
-    p = out_dir / "au_boxplot_by_stage.png"
+    p = assets_dir / "au_boxplot_by_stage.png"
     fig.savefig(p, dpi=300)
     plt.close(fig)
     saved.append(p)
@@ -167,7 +169,7 @@ def save_extended_figures(
         r = df[f"AU_{s}"].corr(df[f"AUM_{s}"])
         stage_corrs.append(float(r) if pd.notna(r) else float("nan"))
     stage_corr_df = pd.DataFrame({"Stage": STAGES, "corr": stage_corrs})
-    csv_p = out_dir / "stage_au_aum_correlations.csv"
+    csv_p = data_dir / "stage_au_aum_correlations.csv"
     stage_corr_df.to_csv(csv_p, index=False)
     saved.append(csv_p)
 
@@ -178,7 +180,7 @@ def save_extended_figures(
     ax.set_ylabel("Pearson r")
     plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
     fig.tight_layout()
-    p = out_dir / "au_aum_correlation_by_stage.png"
+    p = assets_dir / "au_aum_correlation_by_stage.png"
     fig.savefig(p, dpi=300)
     plt.close(fig)
     saved.append(p)
@@ -193,7 +195,7 @@ def save_extended_figures(
     ax_b.set_xlabel("AUM_overall")
     fig.suptitle("Overall AI Usage and AUM Distributions")
     fig.tight_layout()
-    p = out_dir / "au_aum_overall_distributions.png"
+    p = assets_dir / "au_aum_overall_distributions.png"
     fig.savefig(p, dpi=300)
     plt.close(fig)
     saved.append(p)
@@ -215,12 +217,20 @@ def main() -> int:
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
-        help=f"Directory for CSV and PNG outputs (default: {DEFAULT_OUTPUT_DIR})",
+        help=f"Directory for CSV outputs (default: {DEFAULT_OUTPUT_DIR})",
+    )
+    parser.add_argument(
+        "--assets-dir",
+        type=Path,
+        default=DEFAULT_ASSETS_DIR,
+        help=f"Directory for PNG figures (default: {DEFAULT_ASSETS_DIR})",
     )
     args = parser.parse_args()
     inp = args.input.expanduser()
-    out_dir = args.output_dir.expanduser()
-    out_dir.mkdir(parents=True, exist_ok=True)
+    data_dir = args.output_dir.expanduser()
+    assets_dir = args.assets_dir.expanduser()
+    data_dir.mkdir(parents=True, exist_ok=True)
+    assets_dir.mkdir(parents=True, exist_ok=True)
 
     if not inp.is_file():
         print(f"Error: input not found: {inp}", file=sys.stderr)
@@ -271,7 +281,7 @@ def main() -> int:
     print("\n=== Step 2: Descriptive statistics ===")
     print(summary_table.to_string(index=False))
 
-    desc_path = out_dir / "descriptive_statistics.csv"
+    desc_path = data_dir / "descriptive_statistics.csv"
     summary_table.to_csv(desc_path, index=False)
 
     # -------------------------------------------------------------------------
@@ -297,7 +307,7 @@ def main() -> int:
     print("\n=== Step 3: Stage-level summary ===")
     print(stage_summary_df.to_string(index=False))
 
-    stage_path = out_dir / "stage_level_summary.csv"
+    stage_path = data_dir / "stage_level_summary.csv"
     stage_summary_df.to_csv(stage_path, index=False)
 
     # -------------------------------------------------------------------------
@@ -312,7 +322,7 @@ def main() -> int:
     ax1.set_ylabel("Mean AU")
     plt.setp(ax1.get_xticklabels(), rotation=30, ha="right")
     fig1.tight_layout()
-    p1 = out_dir / "usage_by_stage.png"
+    p1 = assets_dir / "usage_by_stage.png"
     fig1.savefig(p1, dpi=300)
     plt.close(fig1)
 
@@ -323,7 +333,7 @@ def main() -> int:
     ax2.set_ylabel("Mean AUM")
     plt.setp(ax2.get_xticklabels(), rotation=30, ha="right")
     fig2.tight_layout()
-    p2 = out_dir / "aum_by_stage.png"
+    p2 = assets_dir / "aum_by_stage.png"
     fig2.savefig(p2, dpi=300)
     plt.close(fig2)
 
@@ -339,7 +349,7 @@ def main() -> int:
     ax3.set_xlabel("Overall AU")
     ax3.set_ylabel("Overall AUM")
     fig3.tight_layout()
-    p3 = out_dir / "au_vs_aum.png"
+    p3 = assets_dir / "au_vs_aum.png"
     fig3.savefig(p3, dpi=300)
     plt.close(fig3)
 
@@ -365,13 +375,15 @@ def main() -> int:
     print("\n=== Step 5: Correlation matrix ===")
     print(corr_matrix.to_string())
 
-    corr_path = out_dir / "correlation_matrix.csv"
+    corr_path = data_dir / "correlation_matrix.csv"
     corr_matrix.to_csv(corr_path)
 
     # -------------------------------------------------------------------------
     # Extended figures (after correlation matrix for heatmap)
     # -------------------------------------------------------------------------
-    extended_paths = save_extended_figures(df, stage_summary_df, corr_matrix, out_dir)
+    extended_paths = save_extended_figures(
+        df, stage_summary_df, corr_matrix, assets_dir, data_dir
+    )
     print("\n=== Extended figures ===")
     for ep in extended_paths:
         print(f"  Saved: {ep}")
@@ -406,7 +418,7 @@ def main() -> int:
     print("\nAUM stage ranking:")
     print(aum_rank.to_string(index=False))
 
-    enriched_path = out_dir / "analysis_dataset_enriched.csv"
+    enriched_path = data_dir / "analysis_dataset_enriched.csv"
     df.to_csv(enriched_path, index=False)
 
     print("\nAnalysis complete. Outputs saved:")
