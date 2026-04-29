@@ -75,85 +75,98 @@
 
 %% ── Abstract ──────────────────────────────────────────────────────────────
 \begin{abstract}
-Generative artificial intelligence (GenAI) tools are rapidly being adopted
-in software engineering education, yet most empirical studies treat AI
-adoption as a global behavior without examining how it varies across the
-software development lifecycle (\SDLC). This paper presents an empirical
-analysis of stage-aware AI usage (\AU) and AI Usage Maturity (\AUM) in an
-undergraduate software engineering course ($N = 85$). We evaluate \AU and
-\AUM across six \SDLC stages---planning, design, implementation, testing,
-deployment, and maintenance---and examine how these constructs relate to
-each other and to stage-specific Technology Acceptance Model (\TAM)
-antecedents.
+Generative artificial intelligence (\GenAI) tools, including software that can write code, answer questions, and assist with technical tasks, are rapidly being adopted in software engineering education, yet most empirical studies treat AI adoption as a single, uniform behavior. This paper presents an empirical analysis of how students use and engage with AI across the different phases of software development in an undergraduate software engineering course ($N = 85$). We evaluate two constructs: AI Usage (\AU), meaning how often students use AI, and AI Usage Maturity (\AUM), meaning how thoughtfully and deliberately they use it. We examine these across six phases of the software development lifecycle: planning, design, implementation, testing, deployment, and maintenance. We also examine how these relate to students' perceptions using the Technology Acceptance Model (\TAM).
 
-Our results show that overall \AU and \AUM are strongly correlated
-($r = 0.690$, $p < .001$), and that \AUM differs significantly across
-\SDLC stages (Friedman $\chi^2 = 66.13$, $p < .001$), with early and
-middle stages exhibiting substantially higher maturity scores than later
-stages. In contrast, \AU does not differ significantly across stages in a
-complete-case analysis, indicating that usage \emph{frequency} is
-relatively uniform while the \emph{quality} of AI interaction varies
-meaningfully by stage. The \AU--\AUM coupling is strongest in planning
-($r = 0.671$, $p < .001$) and absent in maintenance ($r = 0.164$, n.s.),
-demonstrating that high usage frequency does not reliably imply disciplined
-engagement. These results offer actionable guidance for integrating
-AI-aware pedagogy across the full software development lifecycle.
+Our results show that overall AU and AUM are strongly correlated ($r = 0.690$, $p < .001$), and that AUM differs significantly across development phases (Friedman $\chi^{2} = 66.13$, $p < .001$). Students show substantially higher maturity in early and middle phases than in later ones. By contrast, how often students use AI does not vary significantly across phases, meaning usage frequency is relatively uniform while the quality of AI interaction changes meaningfully. The relationship between frequency and maturity is strongest during planning ($r = 0.671$, $p < .001$) and absent during maintenance ($r = 0.164$, n.s.). These findings offer practical guidance for educators seeking to integrate AI more effectively across the full software development process.
 \end{abstract}
 
 \maketitle
 
 %% ==========================================================================
 \section{Introduction}
-\label{sec:intro}
 
-The widespread availability of \GenAI tools---including ChatGPT, GitHub
-Copilot, Claude, and Cursor---has fundamentally changed the landscape of
-software engineering education. These tools can generate code, explain
-programming concepts, assist with debugging, and support documentation,
-and prior research shows they can reduce cognitive load, accelerate
-iteration, and increase student engagement~\cite{becker2023,
-kazemitabaar2023, ali2025}. At the same time, they introduce important
-pedagogical concerns: AI-generated outputs may be incorrect or adopted
-uncritically, and overreliance without evaluation may undermine deeper
-learning~\cite{pirzado2024, sakib2023}.
+The widespread availability of GenAI tools, including ChatGPT,
+GitHub Copilot, Claude, and Cursor, has fundamentally changed
+the landscape of software engineering education. These tools can
+generate code, explain programming concepts, assist with debugging,
+and support documentation, and prior research shows they can reduce
+cognitive load, accelerate iteration, and increase student engagement
+\cite{ali2025, becker2023, kazemitabaar2023}. At the same time,
+they introduce important pedagogical concerns: AI generated outputs
+may be incorrect or adopted uncritically, and overreliance without
+evaluation may undermine deeper learning \cite{pirzado2024, sakib2023}.
 
 As a result, the central question for educators has shifted from
-\emph{whether} students use \GenAI to \emph{how} they use it.
-Most prior empirical work treats AI adoption as a single aggregate
-behavior, measured through overall usage frequency or general
-attitudes---an abstraction that is limiting in software engineering
-education, where student work unfolds across six distinct \SDLC
-stages~\cite{russo2024}, each making different cognitive and technical
-demands.
+whether students use GenAI to how they use it. Much prior empirical
+work models AI adoption primarily as a unitary outcome, typically
+behavioral intention, acceptance, or use, rather than as a
+multidimensional set of practices \cite{taheri2025, acosta2024,
+alharbi2025}. This abstraction is limiting in software engineering
+education, where student work unfolds across the Software Development
+Lifecycle (SDLC), the structured sequence of phases that a software
+project passes through from initial planning to long-term maintenance.
+In educational settings, the SDLC provides the organizational backbone
+of project-based courses: students must first plan and specify
+requirements, then design a system architecture, implement the code,
+test for correctness and robustness, deploy the working system, and
+finally maintain and improve it over time. Each of these six phases
+makes different cognitive and technical demands on students, and
+understanding how AI use varies across them is essential for effective
+curriculum design \cite{russo2024}.
 
 In this paper we build on the Technology Acceptance Model
-(\TAM)~\cite{davis1989a, davis1989b} to develop a \emph{Stage-Aware
-\TAM} framework, evaluating \TAM constructs independently for each \SDLC
-stage. We further introduce \emph{AI Usage Maturity} (\AUM) to capture
-not merely \emph{whether} students use AI, but \emph{how}---specifically
-whether they engage in iterative prompting, output verification, problem
-decomposition, and contextual alignment. We address the following research
-questions:
+(TAM) \cite{davis1989a, davis1989b} to develop a Stage-Aware TAM
+framework, evaluating TAM constructs independently for each SDLC
+stage. We further introduce AI Usage Maturity (AUM) to capture
+not merely whether students use AI, but how, specifically whether
+they engage in iterative prompting, output verification, problem
+decomposition, and contextual alignment. We address the following
+research questions:
 
-\begin{itemize}[noitemsep,topsep=2pt]
-  \item[\textbf{RQ1}] How does AI usage relate to AI usage maturity across \SDLC stages?
-  \item[\textbf{RQ2}] How does AI usage maturity vary across \SDLC stages?
-\end{itemize}
+\begin{description}
+  \item[RQ1] How does AI usage relate to AI usage maturity across
+  SDLC stages?
+  \item[RQ2] How does AI usage maturity vary across SDLC stages?
+\end{description}
 
 %% ==========================================================================
 \section{Background and Related Work}
 \label{sec:background}
 
 \subsection{Technology Acceptance Model}
-\TAM proposes that perceived ease of use (PEOU) and perceived usefulness
-(PU) jointly predict behavioral intention (BI), which in turn predicts
-actual use (AU)~\cite{davis1989a, davis1989b}. This causal chain has been
-validated extensively in educational technology research, and recent work
-on AI-based coding assistants confirms PU and PEOU remain central
-predictors of student adoption~\cite{ali2025, gupta2021, simsek2025}.
-Contemporary \TAM extensions incorporate context-specific antecedents
-including trust, motivation, and facilitating
-conditions~\cite{ali2025, karaoglan2023}.
+
+TAM proposes that perceived ease of use (PEOU), meaning how easy a 
+user finds a technology to operate, and perceived usefulness (PU), 
+meaning how much a user believes the technology will improve their 
+performance, jointly predict behavioral intention (BI), which in turn 
+predicts actual use (AU)~\cite{davis1989a, davis1989b}. In simple terms, 
+students are more likely to use a tool if they find it both easy to use 
+and genuinely helpful. This causal chain has been validated extensively 
+in educational technology research, and recent work on AI-based coding 
+assistants confirms PU and PEOU remain central predictors of student 
+adoption~\cite{ali2025, gupta2021, simsek2025}.
+
+Contemporary TAM extensions incorporate context-specific antecedents 
+including trust, motivation, and facilitating conditions~\cite{ali2025, 
+karaoglan2023}. These extensions recognize that whether a student adopts 
+a technology depends not only on their personal perceptions but also on 
+broader factors such as institutional support, access to resources, and 
+their confidence in the reliability of the tool. In the context of 
+generative AI tools, trust is particularly important because students 
+must judge not only whether a tool is easy and useful, but whether its 
+outputs can be relied upon~\cite{ali2025, karaoglan2023}.
+
+In software engineering education specifically, TAM provides a useful 
+lens for understanding why students choose to engage with AI tools at 
+different points in their coursework~\cite{gupta2021, simsek2025}. 
+However, the standard TAM framework treats adoption as a single, uniform 
+behavior, assuming that a student either accepts or rejects a technology 
+in general. This assumption becomes limiting when students engage with 
+the same tool across qualitatively different tasks, as is the case 
+across the six phases of the SDLC. Our Stage-Aware TAM framework, 
+described in Section~3, addresses this limitation by evaluating TAM 
+constructs independently for each SDLC stage~\cite{davis1989a, 
+davis1989b}.
 
 \subsection{AI Adoption in Software Engineering Education}
 AI adoption has accelerated through tools like ChatGPT and GitHub
@@ -168,21 +181,30 @@ at overall frequency without considering how it varies across the
 motivated and practically useful for curriculum design.
 
 \subsection{AI Literacy}
-AI literacy---encompassing technical proficiency, critical evaluation, and
-ethical competence---has emerged as a critical moderator of how students
-engage with \GenAI systems~\cite{lee2024}. In this study, AI literacy
-is treated as a global antecedent shaping students' perceptions and
-interaction practices across all \SDLC stages.
+AI literacy, which encompasses technical proficiency, critical 
+evaluation, and ethical competence, has emerged as a critical 
+moderator of how students engage with \GenAI systems~\cite{lee2024}. 
+Researchers have defined AI literacy as the set of competencies 
+that enables individuals to critically evaluate AI outputs, 
+communicate effectively with AI tools, and apply AI responsibly 
+in context~\cite{long2020, ng2021}. In educational settings, 
+these competencies are particularly important because students 
+must assess not only whether AI responses are correct, but also 
+whether they are sufficiently detailed and appropriately 
+contextualized for learning~\cite{nath2024}. In this study, AI 
+literacy is treated as a global antecedent shaping students' 
+perceptions and interaction practices across all \SDLC stages.
 
 \subsection{Project-Based SE Courses as a Setting for Stage-Aware Analysis}
+
 Project-based software engineering courses provide a natural setting for
 examining stage-aware AI adoption because they require students to engage
 sequentially with multiple \SDLC phases over a full academic term, rather
 than in isolated programming exercises. Raibulet and Arcelli
 Fontana~\cite{raibulet2025} describe project-based SE education as a
 continuously evolving pedagogical context in which instructors must
-adapt course content to incorporate emerging technologies---including
-large language models and generative AI tools---while preserving
+adapt course content to incorporate emerging technologies, including
+large language models and generative AI tools, while preserving
 coverage of core \SDLC activities from requirements through maintenance.
 Their analysis of a multi-year project-based SE course highlights that
 students encounter genuinely different cognitive and technical demands
@@ -191,7 +213,10 @@ stage-dependent structure. Our study operationalizes exactly this
 insight: by measuring \TAM constructs and maturity per stage, we observe
 how AI adoption patterns differ across the same \SDLC phases that
 Raibulet and Arcelli Fontana argue must each receive dedicated
-pedagogical attention.
+pedagogical attention. The course examined in this study follows
+exactly this structure, requiring student teams to progress through
+all six \SDLC phases over a full academic term at a public research
+university.
 
 %% ==========================================================================
 \section{Theoretical Model and Constructs}
@@ -222,7 +247,7 @@ perceived usefulness is task-dependent rather than tool-dependent:
 PU$_s$ reflects whether a student judges AI useful \emph{for the work
 of stage $s$}, not whether AI is useful in general. Second, that the
 PU$\rightarrow$AU pathway may have different strength at different
-stages---a prediction we test directly in Section~\ref{sec:results}.
+stages, a prediction we test directly in Section~\ref{sec:results}.
 Stages where PU$\rightarrow$AU is strong indicate that utility
 judgments drive usage; stages where it is weak indicate that usage
 is decoupled from judgments of usefulness and is driven instead by
@@ -230,23 +255,22 @@ habit, task structure, or convenience.
 
 Behavioral intention (BI) was collected only for the Planning stage
 to keep survey length manageable; this limitation is discussed in
-Section~\ref{sec:limitations}. External antecedents---AI Literacy and
-Facilitating Conditions---are measured globally: these are properties
-of the student rather than the task and should therefore exert their
-effect uniformly across the lifecycle.
+Section~\ref{sec:limitations}. External antecedents, AI Literacy and
+Facilitating Conditions are measured globally: these are properties
+of the student rather than the task and are treated as global antecedents in this study, though future work could examine whether their effects vary by stage.
 
 \subsection{AI Usage Maturity (AUM)}
 \TAM explains whether a technology is adopted; it does not describe
 how it is used once adopted. For \GenAI that question is central: two
 students with identical PU, PEOU, and AU scores may interact with AI
-in radically different ways---one copies generated code unchanged,
+in radically different ways: one copies generated code unchanged,
 the other iterates on prompts, verifies outputs, and decomposes
 problems before asking for help. These are differences in
 \emph{quality} of engagement, not adoption. To capture this we
 introduce AI Usage Maturity (\AUM) as a construct orthogonal to \AU.
 
 \AUM is defined as the degree to which students employ structured,
-iterative, and verification-oriented practices when interacting with
+iterative, and verification oriented practices when interacting with
 AI systems. We operationalize \AUM along four dimensions:
 
 \begin{itemize}[noitemsep,topsep=2pt,leftmargin=*]
@@ -270,7 +294,7 @@ operationalizing these dimensions in stage-appropriate language:
   \text{AUM}_s = \frac{1}{3} \sum_{i=1}^{3} D_{is}
 \]
 Item wording varies by stage to reflect the kind of work students
-actually do at each phase---for example, at Implementation a
+actually do at each phase.For example, at Implementation a
 verification item asks about code review and testing, while at
 Deployment the parallel item asks about CI results and staging logs.
 Full item texts are provided in the Appendix.
@@ -284,8 +308,8 @@ model underlying our analysis is that these are separable: a student
 may have high PU and high AU at a stage while having low \AUM, or
 (less commonly) the reverse. Correlations between \AU and \AUM
 therefore become an empirical question rather than a tautology, and
-the stage-level pattern of those correlations---which we report in
-Section~\ref{sec:results}---is informative about whether usage
+the stage-level pattern of those correlations which we report in
+Section~\ref{sec:results} is informative about whether usage
 frequency is a reliable proxy for usage quality at a given lifecycle
 stage. Where \AU and \AUM are tightly coupled, instructors can use
 observable usage as a signal of engagement quality; where they are
@@ -485,8 +509,8 @@ In the same complete-case subsample for \AU ($N = 35$), the Friedman
 test finds \emph{no significant difference in \AU across stages}:
 $\chi^2(5) = 5.04$, $p = .41$. When sample composition is held
 constant, students report broadly similar AI usage frequency across all
-six \SDLC stages. This finding refines the common assumption---often
-produced by between-subsample comparisons---that students use AI
+six \SDLC stages. This finding refines the common assumption, often
+produced by between-subsample comparisons that students use AI
 substantially more in early stages. The contrast with the \AUM result
 is striking: over the same lifecycle and same students, \emph{how}
 they engage with AI varies enormously while \emph{how often} they
@@ -640,7 +664,7 @@ and use the empirical patterns to state what each finding means for
 practitioners.
 
 \textbf{RQ1: How does AI usage relate to AI usage maturity across SDLC
-stages?} At the overall level, the answer is clear---\AU and \AUM are
+stages?} At the overall level, the answer is clear: \AU and \AUM are
 strongly correlated ($r = .69$). But this aggregate hides three
 distinct stage-level regimes. Three stages show a \emph{significant
 positive AU--AUM coupling}: Planning ($r = .67$), Implementation
@@ -657,7 +681,7 @@ into a high cluster (Planning, Design, Implementation; $M \approx 3.8$)
 and a low cluster (Testing, Deployment, Maintenance;
 $M \approx 3.2$), with essentially every cross-cluster pairwise
 comparison significant after Bonferroni correction
-(Table~\ref{tab:posthoc}). Students have---on average---developed
+(Table~\ref{tab:posthoc}). Students have, on average, developed
 disciplined AI practices for the first half of the \SDLC and have not
 yet developed them for the second half. Meanwhile \AU is flat across
 the same stages. This is, to our knowledge, the first empirical
@@ -677,7 +701,7 @@ $\rightarrow$ overall-AU correlation ($r = .80$). These three
 findings together tell a coherent story: how students engage with AI
 during planning predicts their lifecycle-wide AI behavior more than
 any other stage we measured. Instructors who want to shape AI habits
-should intervene at the planning stage with explicit scaffolds---for
+should intervene at the planning stage with explicit scaffolds,for
 example, requiring students to document the structured goals and
 constraints they gave to AI, and having them defend planning outputs
 in a sprint review before proceeding to design.
@@ -688,7 +712,7 @@ combines low maturity, attenuated PU$\rightarrow$AU coupling, and
 near-zero or non-significant AU--AUM coupling. This means students at
 these stages use AI opportunistically without either a clear sense of
 why AI is useful or a structured way of using it. Adding more AI
-prompts or examples will not fix this---it will raise \AU without
+prompts or examples will not fix this, it will raise \AU without
 raising \AUM. What is needed is structural scaffolding: for testing,
 require students to specify a test-generation prompt, document the
 failure analysis loop, and record which AI-generated tests they
@@ -701,12 +725,12 @@ against regression results.
 access is effectively universal (89\% weekly \GenAI users; 42\% use
 Claude, 34\% use ChatGPT), and Facilitating Conditions correlates more
 strongly with \AU than with \AUM ($r = .46$ vs $r = .20$). AI
-Literacy---critical evaluation, ethical competence, interpreting
-limitations---correlates more strongly with \AUM than with \AU
+Literacy, critical evaluation, ethical competence, interpreting
+limitations correlates more strongly with \AUM than with \AU
 ($r = .35$ vs $r = .14$). For experienced, AI-fluent students, adding
 more tools or more access will not improve the quality of AI use. What
 will improve quality is direct instruction on evaluating, critiquing,
-and verifying AI outputs---topics that fit naturally into existing
+and verifying AI outputs topics that fit naturally into existing
 course units on code review, testing, and software quality.
 
 \textbf{4. Address heterogeneity within cohorts, not just between
@@ -714,9 +738,9 @@ stages.} Even in Implementation, where \AUM is highest on average, a
 subset of students report minimal AI use and another subset report
 heavy use with low maturity. Classroom practices that assume uniform
 AI engagement will miss both tails. Differentiated prompts, AI-use
-self-assessments, and tiered scaffolding---where students with low
+self-assessments, and tiered scaffolding where students with low
 \AUM receive structured templates while students with higher \AUM
-receive critique-focused exercises---can address this within-stage
+receive critique-focused exercises can address this within-stage
 heterogeneity that our aggregated means do not expose.
 
 %% ==========================================================================
@@ -724,12 +748,12 @@ heterogeneity that our aggregated means do not expose.
 \label{sec:limitations}
 
 This study has several important limitations. First, all measures are
-self-reported; students may systematically overreport mature practices,
+self-reported; students may systematically over report mature practices,
 particularly in a course context where such behaviors are valued. Social
 desirability bias is a known concern in educational surveys, and our use
 of five-point Likert scales does not mitigate this directly. Future
-triangulation with observable artifacts---prompt logs, commit histories,
-or code review records---would help validate self-report measures.
+triangulation with observable artifacts, prompt logs, commit histories,
+or code review records would help validate self-report measures.
 
 Second, the sample is drawn from a single institution and two sections
 of the same course, which limits generalizability. Students in this
@@ -756,7 +780,7 @@ promising approaches for bridging this gap. Longitudinal designs could
 also examine whether students' \AUM evolves over time as they gain
 experience with AI tools across multiple projects and courses,
 and whether targeted pedagogical interventions can shift \AUM at
-specific \SDLC stages---particularly testing, deployment, and
+specific \SDLC stages, particularly testing, deployment, and
 maintenance, where the current data suggest the greatest opportunity
 for improvement.
 
@@ -773,12 +797,12 @@ composition is held constant. AI usage maturity does differ
 Implementation showing meaningfully higher \AUM than Testing,
 Deployment, and Maintenance. The coupling between the two is itself
 stage-dependent: tightest in Planning ($r = .671$) and absent in
-Maintenance ($r = .164$, n.s.). Together with the stage-level
+Maintenance ($r = .164$, n.s.). Together with stage-level 
 PU$\rightarrow$AU evidence, these patterns support a stage-aware
 perspective on AI adoption and provide educators with a practical
-framework---grounded in specific correlations rather than general
-intuitions---for assessing the quality of AI-assisted development
-practices across the full software lifecycle.
+framework -- grounded in specific correlations rather than general
+intuitions -- for assessing the quality of AI-assisted development
+practices across the entire software lifecycle.
 
 %% ── Acknowledgements ──────────────────────────────────────────────────────
 \begin{acks}
