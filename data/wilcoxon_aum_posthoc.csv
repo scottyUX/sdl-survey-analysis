@@ -1,0 +1,16 @@
+Stage_A,Stage_B,N,statistic,p_raw,p_bonferroni,significant
+Planning,Design,87,509.5,0.5633,1.0,n.s.
+Planning,Implementation,87,745.0,0.5164,1.0,n.s.
+Planning,Testing,87,307.5,0.0,0.0005,**
+Planning,Deployment,87,222.0,0.0,0.0,**
+Planning,Maintenance,87,296.0,0.0,0.0001,**
+Design,Implementation,87,728.5,0.3247,1.0,n.s.
+Design,Testing,87,345.5,0.0,0.0004,**
+Design,Deployment,87,140.5,0.0,0.0,**
+Design,Maintenance,87,358.0,0.0,0.0,**
+Implementation,Testing,87,349.0,0.0,0.0001,**
+Implementation,Deployment,87,95.0,0.0,0.0,**
+Implementation,Maintenance,87,336.0,0.0,0.0,**
+Testing,Deployment,87,309.5,0.0005,0.008,**
+Testing,Maintenance,87,632.0,0.4592,1.0,n.s.
+Deployment,Maintenance,87,371.5,0.0262,0.3929,n.s.

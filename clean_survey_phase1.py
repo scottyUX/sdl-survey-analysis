@@ -19,6 +19,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from survey_constants import MAX_DURATION_SECONDS, MIN_DURATION_SECONDS
+
 # Default input: survey export on Desktop (override with --input)
 DEFAULT_INPUT = (
     Path.home()
@@ -114,11 +116,11 @@ def print_duration_noise_report(
         return
 
     d = df[duration_col]
-    short = d.notna() & (d < 60)
-    long_ = d.notna() & (d > 3600)
+    short = d.notna() & (d <= MIN_DURATION_SECONDS)
+    long_ = d.notna() & (d > MAX_DURATION_SECONDS)
     print(f"\n--- Potential test / outlier durations ({label}) ---")
-    print(f"  Duration < 60 s:   {int(short.sum())} rows")
-    print(f"  Duration > 3600 s: {int(long_.sum())} rows")
+    print(f"  Duration <= {MIN_DURATION_SECONDS} s: {int(short.sum())} rows")
+    print(f"  Duration > {MAX_DURATION_SECONDS} s:  {int(long_.sum())} rows")
 
     cols = preview_cols or []
     base = [c for c in ["ResponseId", "StartDate", duration_col] if c in df.columns]
@@ -128,7 +130,7 @@ def print_duration_noise_report(
         print(f"\n  Preview: duration < 60 s (up to {preview_n} rows)")
         print(df.loc[short, show].head(preview_n).to_string(index=False))
     if long_.any() and show:
-        print(f"\n  Preview: duration > 3600 s (up to {preview_n} rows)")
+        print(f"\n  Preview: duration > {MAX_DURATION_SECONDS} s (up to {preview_n} rows)")
         print(df.loc[long_, show].head(preview_n).to_string(index=False))
 
 
@@ -204,14 +206,30 @@ def main() -> int:
     if "Progress" not in df.columns:
         print("Warning: no 'Progress' column; filter may remove all rows.")
 
-    duration_ok = df[DURATION_COL].notna() & (df[DURATION_COL] > 120)
-    n_invalid_duration = int((df[DURATION_COL].isna() | (df[DURATION_COL] <= 120)).sum())
+    duration_ok = (
+        df[DURATION_COL].notna()
+        & (df[DURATION_COL] > MIN_DURATION_SECONDS)
+        & (df[DURATION_COL] <= MAX_DURATION_SECONDS)
+    )
+    n_too_short = int((df[DURATION_COL].notna() & (df[DURATION_COL] <= MIN_DURATION_SECONDS)).sum())
+    n_too_long = int((df[DURATION_COL].notna() & (df[DURATION_COL] > MAX_DURATION_SECONDS)).sum())
+    n_invalid_duration = int((~duration_ok & df[DURATION_COL].notna()).sum()) + int(
+        df[DURATION_COL].isna().sum()
+    )
 
     mask = finished_ok & (progress == 100) & duration_ok
     df_filt = df.loc[mask].copy()
 
-    print(f"Rows with invalid or non-numeric duration (excluded by Duration > 120): {n_invalid_duration}")
-    print_step_stats("Filter (Finished & Progress==100 & Duration > 120)", n_before_filter, len(df_filt))
+    print(
+        f"Rows excluded by duration: {n_too_short} <= {MIN_DURATION_SECONDS} s, "
+        f"{n_too_long} > {MAX_DURATION_SECONDS} s, "
+        f"{int(df[DURATION_COL].isna().sum())} non-numeric/missing"
+    )
+    print_step_stats(
+        f"Filter (Finished & Progress==100 & {MIN_DURATION_SECONDS} < Duration <= {MAX_DURATION_SECONDS})",
+        n_before_filter,
+        len(df_filt),
+    )
 
     # -------------------------------------------------------------------------
     # Step 3: Remove noise — duplicates; post-filter long-duration preview

@@ -1,0 +1,7 @@
+Stage,Prefix,Items,N,Cronbach_alpha
+plan,Planning,3,87,0.897
+design,Design,3,87,0.881
+implementation,Impl,3,87,0.695
+testing,Testing,3,87,0.854
+deployment,Deployment,3,87,0.9
+maintenance,Maintenance,3,87,0.938
